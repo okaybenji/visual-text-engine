@@ -1,0 +1,32 @@
+body {
+  margin: 0;
+  background-color: hsl(302, 10%, 99%);
+  font-family: 'Varela Round', sans-serif;
+  font-size: 5vh;
+  color: hsl(302, 10%, 99%);
+  width: 100vw;
+  height: 100vh;
+}
+
+h1 {
+  font-size: 5vh;
+}
+
+.room {
+  width: 50vh;
+  height: 20vh;
+  border-radius: 2vh;
+  padding: 4vh;
+  background-color: hsl(268, 94%, 25%);
+  position: absolute;
+  user-select: none; /* Prevent accidental highlighting while dragging rooms */
+}
+
+[draggable=true] {
+  cursor: move;
+}
+
+.resizable {
+  overflow: scroll;
+  resize: both;
+}
