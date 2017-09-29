@@ -8,20 +8,20 @@ unlimitedAdventure.rooms
 
     room.innerHTML = `
       <br>
-      <span class="title">${roomData.id}</span>
+      <span class="title" contenteditable="true">${roomData.id}</span>
       <br>
       <span>
         <span class="prop">NAME</span>
-        <span class="value">${roomData.name}</span>
+        <span class="value" contenteditable="true">${roomData.name}</span>
         <br>
         <br>
         <span class="prop">DESCRIPTION</span>
-        <span class="value">${roomData.desc}</span>
+        <span class="value" contenteditable="true">${roomData.desc}</span>
         <br>
         <br>
         <span class="prop">ARTWORK</span>
         <br>
-        <span class="apple">${roomData.img}</span><br><br>
+        <span class="apple" contenteditable="true">${roomData.img}</span><br><br>
       </span>
     `;
     room.classList.add('room'); // Style rooms
