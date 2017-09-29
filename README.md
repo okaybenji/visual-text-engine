@@ -15,7 +15,7 @@ Visual Text Engine (working title) is meant to be a graphical user interface for
 - [ ] Set/change room ID, name, description, and artwork (include link to [asciipaint.com](http://asciipaint.com))
 - [X] Drag-and-drop room cards (position as you like)
 - [X] Resize room cards
-- [ ] Depth sort room cards on click
+- [ ] Auto-size and -position rooms cards on load (look into box packing)
 - [ ] Add/remove room exits
 - [ ] Drag-and-drop connections between rooms (change where exits go)
 - [ ] Add/remove/edit room items

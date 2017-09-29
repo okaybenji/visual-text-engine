@@ -2,11 +2,14 @@ console.log(unlimitedAdventure); // Debugging
 
 const $ = (query) => document.querySelector(query);
 
+// zIndex is used to always bring the last-clicked room to the top
+let zIndex = unlimitedAdventure.rooms.length;
+
 unlimitedAdventure.rooms
   .map(roomData => {
-    const room = document.createElement('div');
+    const roomCard = document.createElement('div');
 
-    room.innerHTML = `
+    roomCard.innerHTML = `
       <br>
       <span class="title" contenteditable="true">${roomData.id}</span>
       <br>
@@ -24,22 +27,25 @@ unlimitedAdventure.rooms
         <span class="apple" contenteditable="true">${roomData.img}</span><br><br>
       </span>
     `;
-    room.classList.add('room'); // Style rooms
-    room.classList.add('resizable'); // Make them resizable
+    roomCard.classList.add('room'); // Style rooms
+    roomCard.classList.add('resizable'); // Make them resizable
 
     // Make rooms draggable
     let offsetX, offsetY;
 
     // Move room to mouse position (maintaining mouse position relative to room)
     const move = e => {
-      room.style.top = `${e.clientY - offsetY}px`;
-      room.style.left = `${e.clientX - offsetX}px`;
+      roomCard.style.top = `${e.clientY - offsetY}px`;
+      roomCard.style.left = `${e.clientX - offsetX}px`;
     };
 
-    room.addEventListener('mousedown', e => {
+    roomCard.addEventListener('mousedown', e => {
+      // Bring the room to the top when clicked
+      roomCard.style.zIndex = zIndex++;
+
       // Capture mouse position relative to element
-      offsetX = e.clientX - room.offsetLeft;
-      offsetY = e.clientY - room.offsetTop;
+      offsetX = e.clientX - roomCard.offsetLeft;
+      offsetY = e.clientY - roomCard.offsetTop;
 
       // Only move if clicking title bar
       if (offsetY > 30) {
@@ -53,11 +59,11 @@ unlimitedAdventure.rooms
       $('body').removeEventListener('mousemove', move);
     }, false);
 
-    room.addEventListener('mouseup', (e) => {
+    roomCard.addEventListener('mouseup', (e) => {
       $('body').removeEventListener('mousemove', move);
     }, false);
 
-    return room;
+    return roomCard;
   })
   .forEach(r => {
     $('main').appendChild(r);
