@@ -6,7 +6,24 @@ unlimitedAdventure.rooms
   .map(roomData => {
     const room = document.createElement('div');
 
-    room.innerHTML = `<h1>${roomData.name}</h1>`;
+    room.innerHTML = `
+      <br>
+      <span class="title">${roomData.id}</span>
+      <br>
+      <span>
+        <span class="prop">NAME</span>
+        <span class="value">${roomData.name}</span>
+        <br>
+        <br>
+        <span class="prop">DESCRIPTION</span>
+        <span class="value">${roomData.desc}</span>
+        <br>
+        <br>
+        <span class="prop">ARTWORK</span>
+        <br>
+        <span class="apple">${roomData.img}</span><br><br>
+      </span>
+    `;
     room.classList.add('room'); // Style rooms
     room.classList.add('resizable'); // Make them resizable
 
@@ -24,10 +41,11 @@ unlimitedAdventure.rooms
       offsetX = e.clientX - room.offsetLeft;
       offsetY = e.clientY - room.offsetTop;
 
-      // Allow clicking the corner to resize the room (without moving it)
-      if (offsetX > room.offsetWidth - 10 && offsetY > room.offsetHeight - 10) {
+      // Only move if clicking title bar
+      if (offsetY > 30) {
         return;
       }
+
       $('body').addEventListener('mousemove', move);
     }, false);
 
