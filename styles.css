@@ -29,6 +29,10 @@ button {
   padding: 1vh;
 }
 
+button:focus {
+  outline: none;
+}
+
 .room {
   background-color: hsl(268, 94%, 25%);
   box-shadow: 1vh 1vh hsl(268, 94%, 15%);
