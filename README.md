@@ -6,12 +6,14 @@ Visual Text Engine (working title) is meant to be a graphical user interface for
 
 #### General
 - [ ] Import JSON game disks
-- [ ] Export JSON game disks
+- [X] Export JSON game disks*
 - [ ] Export game to webpage
 - [ ] Export game to zip (for easy upload to [itch.io](https://itch.io))
 - [ ] Manage starting room ID and starting inventory
 - [ ] Add rooms
 - [X] Remove rooms
+
+**`use` methods are not yet supported*
 
 #### Room Editor
 - [X] Set/change room ID, name, description, exits and artwork

@@ -4,6 +4,17 @@ console.log(disk); // Debugging
 
 const $ = (query) => document.querySelector(query);
 
+$('#export').onclick = () => {
+  const diskName = prompt('Enter a name for your disk (must be a valid JavaScript variable name)', 'game-disk');
+  // TODO: This will currently remove item use methods.
+  // First, create disk object where use methods are replace with use.toString().
+  // Pass this version to JSON.stringify when creating diskString.
+  // Then, update text-engine to check if a use method is a string and eval it.
+  const diskString = `const ${diskName} = ${JSON.stringify(disk, null, 2)};`;
+  const diskBlob = new Blob([diskString], {type: 'text/plain;charset=utf-8'});
+  saveAs(diskBlob, `${diskName}.js`);
+};
+
 // zIndex is used to always bring the last-clicked room to the top
 let zIndex = disk.rooms.length;
 

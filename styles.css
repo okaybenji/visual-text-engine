@@ -6,23 +6,38 @@
 body {
   margin: 0;
   background-color: hsl(302, 10%, 99%);
-  font-family: 'Varela Round', sans-serif;
-  font-size: 3.5vh;
-  color: hsl(302, 10%, 99%);
   width: 100vw;
   height: 100vh;
+  font-size: 3.5vh;
+}
+
+body * {
+  color: hsl(302, 10%, 99%);
+  font-family: 'Varela Round', sans-serif;
+  border-radius: 2vh;
+}
+
+button {
+  background-color: hsl(164, 94%, 25%);
+  box-shadow: 1vh 1vh hsl(164, 94%, 15%);
+  position: absolute;
+  top: 1vh;
+  right: 1vh;
+  z-index: 9999999;
+  font-size: 5vh;
+  border: none;
+  padding: 1vh;
 }
 
 .room {
+  background-color: hsl(268, 94%, 25%);
+  box-shadow: 1vh 1vh hsl(268, 94%, 15%);
   width: 50vh;
   height: 20vh;
-  border-radius: 2vh;
   border-top: 25px solid hsl(268, 94%, 77%);
   padding: 0 4vh;
-  background-color: hsl(268, 94%, 25%);
   position: absolute;
   user-select: none; /* Prevent accidental highlighting while dragging rooms */
-  box-shadow: 1vh 1vh hsl(268, 94%, 15%);
 }
 
 .title {
