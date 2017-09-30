@@ -5,7 +5,7 @@ console.log(disk); // Debugging
 const $ = (query) => document.querySelector(query);
 
 $('#export').onclick = () => {
-  const diskName = prompt('Enter a name for your disk (must be a valid JavaScript variable name)', 'game-disk');
+  const diskName = prompt('Enter a name for your disk (must be a valid JavaScript variable name)', 'gameDisk');
 
   if (!diskName) {
     return;
@@ -32,7 +32,22 @@ const deleteRoom = (roomCard) => {
   }
 
   $('body').removeChild(roomCard);
-  delete roomCard;
+  updateData();
+};
+
+const addExit = (exitList) => {
+  const exit = document.createElement('div');
+  exit.classList.add('exit');
+  exit.innerHTML = `
+    <span class="dir" contenteditable="true">directionName</span> →
+    <span class="id" contenteditable="true">roomId</span>
+    <sup class="deleteRoom">x</sup>
+  `;
+  exitList.appendChild(exit);
+};
+
+const deleteExit = (exit) => {
+  $('body').removeChild(exit);
   updateData();
 };
 
@@ -46,15 +61,18 @@ const roomCards = disk.rooms
 
     const exitList = (roomData.exits || [])
       .map(exit => `
-        <span class="dir" contenteditable="true">${exit.dir}</span> →
-        <span class="id" contenteditable="true">${exit.id}</span>
+        <div class="exit">
+          <span class="dir" contenteditable="true">${exit.dir}</span> →
+          <span class="id" contenteditable="true">${exit.id}</span>
+          <sup class="deleteExit">x</sup>
+        </div>
       `)
       .join('<br>');
 
     roomCard.innerHTML = `
       <br>
       <span class="title">
-        <span class="id" contenteditable="true">${roomData.id}</span> <sup class="delete">x</sup>
+        <span class="id" contenteditable="true">${roomData.id}</span> <sup class="deleteRoom">x</sup>
       </span>
       <br>
       <span>
@@ -70,7 +88,7 @@ const roomCards = disk.rooms
         <span class="value items">${itemList}</span>
         <br>
         <br>
-        <span class="prop">EXITS</span>
+        <span class="prop">EXITS <sup class="addExit">+</sup></span>
         <br>
         <span class="value exits">${exitList}</span>
         <br>
@@ -116,8 +134,17 @@ const roomCards = disk.rooms
       $('body').removeEventListener('mousemove', move);
     }, false);
 
-    roomCard.querySelector('.delete').onclick = () => {
+    // Delete room
+    roomCard.querySelector('.deleteRoom').onclick = () => {
       deleteRoom(roomCard);
+    };
+
+    // TODO: Delete exit
+
+    // Add exit
+    roomCard.querySelector('.addExit').onclick = () => {
+      console.log(roomCard.querySelector('.exits'));
+      addExit(roomCard.querySelector('.exits'));
     };
 
     return roomCard;
@@ -137,7 +164,7 @@ const updateData = () => {
     const roomData = disk.rooms[i];
     const getVal = (className) => roomCard.querySelector(className).innerText;
 
-    const exits = toArray(roomCard.querySelectorAll('.exits'))
+    const exits = toArray(roomCard.querySelectorAll('.exit'))
       .filter(exit => (exit.querySelector('.dir'))) // TODO: why this?
       .map(exit => ({
         dir: exit.querySelector('.dir').innerText,
