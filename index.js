@@ -24,7 +24,7 @@ unlimitedAdventure.rooms
         <br>
         <span class="prop">ARTWORK</span>
         <br>
-        <span class="apple" contenteditable="true">${roomData.img}</span><br><br>
+        <span class="art" contenteditable="true">${roomData.img}</span><br><br>
       </span>
     `;
     roomCard.classList.add('room'); // Style rooms

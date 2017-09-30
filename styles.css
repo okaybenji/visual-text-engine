@@ -38,9 +38,10 @@ body {
   font-family: 'Raleway Dots', serif;
 }
 
-.apple {
+.art {
   font-family: 'Apple II';
   font-size: 2vh;
+  white-space: pre;
 }
 
 [draggable=true] {
