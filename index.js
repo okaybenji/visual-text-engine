@@ -23,6 +23,109 @@ $('#export').onclick = () => {
 // zIndex is used to always bring the last-clicked room to the top
 let zIndex = disk.rooms.length;
 
+const makeRoomCard = ({id, name, desc, items, exits, img}) => {
+  const roomCard = document.createElement('div');
+
+  const itemList = (items || [])
+    .map(item => item.name)
+    .join(', ');
+
+  const exitList = (exits || [])
+    .map(exit => makeExit(exit));
+
+  roomCard.innerHTML = `
+    <br>
+    <span class="title">
+      <span class="id" contenteditable="true">${id}</span> <sup class="deleteRoom">x</sup>
+    </span>
+    <br>
+    <span>
+      <span class="prop">NAME</span>
+      <span class="value name" contenteditable="true">${name}</span>
+      <br>
+      <br>
+      <span class="prop">DESCRIPTION</span>
+      <span class="value desc" contenteditable="true">${desc}</span>
+      <br>
+      <br>
+      <span class="prop">ITEMS</span>
+      <span class="value items">${itemList}</span>
+      <br>
+      <br>
+      <span class="prop">EXITS <sup class="addExit">+</sup></span>
+      <br>
+      <span class="value exits"></span>
+      <br>
+      <span class="prop">ARTWORK</span>
+      <br>
+      <span class="value img" contenteditable="true">${img || ''}</span><br><br>
+    </span>
+  `;
+  roomCard.classList.add('room'); // Style rooms
+  roomCard.classList.add('resizable'); // Make them resizable
+
+  exitList.forEach(exit => {
+    roomCard.querySelector('.exits').appendChild(exit);
+  });
+
+  // Make rooms draggable
+  let offsetX, offsetY;
+
+  // Move room to mouse position (maintaining mouse position relative to room)
+  const move = e => {
+    roomCard.style.top = `${e.clientY - offsetY}px`;
+    roomCard.style.left = `${e.clientX - offsetX}px`;
+  };
+
+  roomCard.addEventListener('mousedown', e => {
+    // Bring the room to the top when clicked
+    roomCard.style.zIndex = zIndex++;
+
+    // Capture mouse position relative to element
+    offsetX = e.clientX - roomCard.offsetLeft;
+    offsetY = e.clientY - roomCard.offsetTop;
+
+    // Only move if clicking title bar
+    if (offsetY > 30) {
+      return;
+    }
+
+    $('body').addEventListener('mousemove', move);
+  }, false);
+
+  $('body').addEventListener('mouseup', (e) => {
+    $('body').removeEventListener('mousemove', move);
+  }, false);
+
+  roomCard.addEventListener('mouseup', (e) => {
+    $('body').removeEventListener('mousemove', move);
+  }, false);
+
+  // Delete room
+  roomCard.querySelector('.deleteRoom').onclick = () => {
+    deleteRoom(roomCard);
+  };
+
+  // Add exit
+  roomCard.querySelector('.addExit').onclick = () => {
+    addExit(roomCard.querySelector('.exits'));
+  };
+
+  return roomCard;
+};
+
+const addRoom = () => {
+  const room = makeRoomCard({
+    id: 'roomId',
+    name: 'Room name',
+    desc: 'Room description',
+  });
+
+  $('body').appendChild(room);
+
+  updateData();
+};
+
 const deleteRoom = (roomCard) => {
   const roomId = roomCard.querySelector('.id').innerText;
   const deleteWasConfirmed = confirm(`Press OK to delete room: ${roomId}. You cannot undo thus change. (However, the change will not be saved until you export your game data.)`);
@@ -72,99 +175,7 @@ const addExit = (exitList) => {
   exitList.appendChild(exit);
 };
 
-const roomCards = disk.rooms
-  .map(roomData => {
-    const roomCard = document.createElement('div');
-
-    const itemList = (roomData.items || [])
-      .map(item => item.name)
-      .join(', ');
-
-    const exitList = (roomData.exits || [])
-      .map(exit => makeExit(exit));
-
-    roomCard.innerHTML = `
-      <br>
-      <span class="title">
-        <span class="id" contenteditable="true">${roomData.id}</span> <sup class="deleteRoom">x</sup>
-      </span>
-      <br>
-      <span>
-        <span class="prop">NAME</span>
-        <span class="value name" contenteditable="true">${roomData.name}</span>
-        <br>
-        <br>
-        <span class="prop">DESCRIPTION</span>
-        <span class="value desc" contenteditable="true">${roomData.desc}</span>
-        <br>
-        <br>
-        <span class="prop">ITEMS</span>
-        <span class="value items">${itemList}</span>
-        <br>
-        <br>
-        <span class="prop">EXITS <sup class="addExit">+</sup></span>
-        <br>
-        <span class="value exits"></span>
-        <br>
-        <span class="prop">ARTWORK</span>
-        <br>
-        <span class="value img" contenteditable="true">${roomData.img}</span><br><br>
-      </span>
-    `;
-    roomCard.classList.add('room'); // Style rooms
-    roomCard.classList.add('resizable'); // Make them resizable
-
-    exitList.forEach(exit => {
-      roomCard.querySelector('.exits').appendChild(exit);
-    });
-
-    // Make rooms draggable
-    let offsetX, offsetY;
-
-    // Move room to mouse position (maintaining mouse position relative to room)
-    const move = e => {
-      roomCard.style.top = `${e.clientY - offsetY}px`;
-      roomCard.style.left = `${e.clientX - offsetX}px`;
-    };
-
-    roomCard.addEventListener('mousedown', e => {
-      // Bring the room to the top when clicked
-      roomCard.style.zIndex = zIndex++;
-
-      // Capture mouse position relative to element
-      offsetX = e.clientX - roomCard.offsetLeft;
-      offsetY = e.clientY - roomCard.offsetTop;
-
-      // Only move if clicking title bar
-      if (offsetY > 30) {
-        return;
-      }
-
-      $('body').addEventListener('mousemove', move);
-    }, false);
-
-    $('body').addEventListener('mouseup', (e) => {
-      $('body').removeEventListener('mousemove', move);
-    }, false);
-
-    roomCard.addEventListener('mouseup', (e) => {
-      $('body').removeEventListener('mousemove', move);
-    }, false);
-
-    // Delete room
-    roomCard.querySelector('.deleteRoom').onclick = () => {
-      deleteRoom(roomCard);
-    };
-
-    // TODO: Delete exit
-
-    // Add exit
-    roomCard.querySelector('.addExit').onclick = () => {
-      addExit(roomCard.querySelector('.exits'));
-    };
-
-    return roomCard;
-  })
+const roomCards = disk.rooms.map(makeRoomCard);
 
 roomCards.forEach(r => {
   $('body').appendChild(r);
@@ -178,7 +189,13 @@ const updateData = () => {
   // TODO: If user changes name of starting room, update starting roomId
   disk.rooms = roomCards.map((roomCard, i) => {
     const roomData = disk.rooms[i];
-    const getVal = (className) => roomCard.querySelector(className).innerText;
+
+    const getVal = (className) => {
+      const element = roomCard.querySelector(className);
+      if (element) {
+        return element.innerText;
+      }
+    };
 
     const exits = toArray(roomCard.querySelectorAll('.exit'))
       .filter(exit => (exit.querySelector('.dir'))) // TODO: why this?
@@ -187,7 +204,7 @@ const updateData = () => {
         id: exit.querySelector('.id').innerText,
       }));
 
-    return Object.assign(roomData, {
+    return Object.assign(roomData || {}, {
       id: getVal('.id'),
       name: getVal('.name'),
       desc: getVal('.desc'),
