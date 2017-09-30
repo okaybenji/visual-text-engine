@@ -35,20 +35,41 @@ const deleteRoom = (roomCard) => {
   updateData();
 };
 
-const addExit = (exitList) => {
+const makeExit = ({dir, id}) => {
   const exit = document.createElement('div');
   exit.classList.add('exit');
-  exit.innerHTML = `
-    <span class="dir" contenteditable="true">directionName</span> →
-    <span class="id" contenteditable="true">roomId</span>
-    <sup class="deleteRoom">x</sup>
-  `;
-  exitList.appendChild(exit);
+
+  const direction = document.createElement('span');
+  direction.contentEditable = true;
+  direction.classList.add('dir');
+  direction.innerText = dir;
+
+  const roomId = document.createElement('span');
+  roomId.contentEditable = true;
+  roomId.classList.add('id');
+  roomId.innerText = id;
+
+  const arrow = document.createElement('span');
+  arrow.innerText = ' → ';
+
+  const deleteButton = document.createElement('sup');
+  deleteButton.innerText = ' x';
+  deleteButton.onclick = () => {
+    exit.parentNode.removeChild(exit);
+    updateData();
+  };
+
+  exit.appendChild(direction);
+  exit.appendChild(arrow);
+  exit.appendChild(roomId);
+  exit.appendChild(deleteButton);
+
+  return exit;
 };
 
-const deleteExit = (exit) => {
-  $('body').removeChild(exit);
-  updateData();
+const addExit = (exitList) => {
+  const exit = makeExit({dir: 'directionName', id: 'roomId'});
+  exitList.appendChild(exit);
 };
 
 const roomCards = disk.rooms
@@ -60,14 +81,7 @@ const roomCards = disk.rooms
       .join(', ');
 
     const exitList = (roomData.exits || [])
-      .map(exit => `
-        <div class="exit">
-          <span class="dir" contenteditable="true">${exit.dir}</span> →
-          <span class="id" contenteditable="true">${exit.id}</span>
-          <sup class="deleteExit">x</sup>
-        </div>
-      `)
-      .join('<br>');
+      .map(exit => makeExit(exit));
 
     roomCard.innerHTML = `
       <br>
@@ -90,8 +104,7 @@ const roomCards = disk.rooms
         <br>
         <span class="prop">EXITS <sup class="addExit">+</sup></span>
         <br>
-        <span class="value exits">${exitList}</span>
-        <br>
+        <span class="value exits"></span>
         <br>
         <span class="prop">ARTWORK</span>
         <br>
@@ -100,6 +113,10 @@ const roomCards = disk.rooms
     `;
     roomCard.classList.add('room'); // Style rooms
     roomCard.classList.add('resizable'); // Make them resizable
+
+    exitList.forEach(exit => {
+      roomCard.querySelector('.exits').appendChild(exit);
+    });
 
     // Make rooms draggable
     let offsetX, offsetY;
@@ -143,7 +160,6 @@ const roomCards = disk.rooms
 
     // Add exit
     roomCard.querySelector('.addExit').onclick = () => {
-      console.log(roomCard.querySelector('.exits'));
       addExit(roomCard.querySelector('.exits'));
     };
 
