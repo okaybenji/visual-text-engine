@@ -10,16 +10,15 @@ Visual Text Engine (working title) is meant to be a graphical user interface for
 - [ ] Export game to webpage
 - [ ] Export game to zip (for easy upload to [itch.io](https://itch.io))
 - [ ] Manage starting room ID and starting inventory
+- [ ] Add/remove rooms
 
 #### Room Editor
-- [ ] Set/change room ID, name, description, and artwork (include link to [asciipaint.com](http://asciipaint.com))
-- [X] Drag-and-drop room cards (position as you like)
-- [X] Resize room cards
+- [X] Set/change room ID, name, description, exits and artwork
+- [X] Drag and resize room cards
 - [ ] Auto-size and -position rooms cards on load (look into box packing)
 - [ ] Add/remove room exits
-- [ ] Drag-and-drop connections between rooms (change where exits go)
+- [ ] Visualize connections between rooms
 - [ ] Add/remove/edit room items
-- [ ] Drag-and-drop items (move items to other rooms)
 
 ### Item Editor
 - [ ] Set/change name, description, isTakeable property
@@ -27,5 +26,7 @@ Visual Text Engine (working title) is meant to be a graphical user interface for
 - [ ] Set item use function (perhaps save to/load from .js files)
 
 ### Someday/maybe
+- [ ] Drag-and-drop connections between rooms
+- [ ] Drag-and-drop items (move items to other rooms)
 - [ ] ASCII art editor
 - [ ] CSS style editor
