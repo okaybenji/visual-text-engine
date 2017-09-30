@@ -17,6 +17,7 @@ Visual Text Engine (working title) is meant to be a graphical user interface for
 
 #### Room Editor
 - [X] Set/change room ID, name, description, exits and artwork
+- [ ] Choose exit destination from drop-down list
 - [X] Drag and resize room cards
 - [ ] Auto-size and -position rooms cards on load (look into box packing)
 - [X] Add room exits
