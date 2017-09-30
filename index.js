@@ -1,23 +1,45 @@
-const disk = unlimitedAdventure;
-
-console.log(disk); // Debugging
-
+let disk = unlimitedAdventure;
 const $ = (query) => document.querySelector(query);
+const toArray = (nodeList) => [].slice.call(nodeList);
 
-$('#export').onclick = () => {
-  const diskName = prompt('Enter a name for your disk (must be a valid JavaScript variable name)', 'gameDisk');
+const loadDisk = () => {
+  const oldRoomCards = toArray(document.querySelectorAll('.room'));
+  oldRoomCards.forEach(room => {
+    $('body').removeChild(room)
+  });
 
-  if (!diskName) {
-    return;
-  }
+  const newRoomCards = disk.rooms.map(makeRoomCard);
+  newRoomCards.forEach(r => {
+    $('body').appendChild(r);
+  });
+};
 
-  // TODO: This will currently remove item use methods.
+  // TODO: Imports and exports use JSON.stringify and will currently remove item use methods.
   // First, create disk object where use methods are replace with use.toString().
   // Pass this version to JSON.stringify when creating diskString.
   // Then, update text-engine to check if a use method is a string and eval it.
-  const diskString = `const ${diskName} = ${JSON.stringify(disk, null, 2)};`;
-  const diskBlob = new Blob([diskString], {type: 'text/plain;charset=utf-8'});
-  saveAs(diskBlob, `${diskName}.js`);
+const importJSON = () => {
+  const file = $('input').files[0];
+  const fileReader = new FileReader();
+
+  fileReader.onload = (e) => {
+    disk = JSON.parse(e.target.result);
+    loadDisk();
+  };
+
+  fileReader.readAsText(file);
+};
+
+const exportJSON = (json) => {
+  const filename = prompt('Save file as...', 'gameDisk.json');
+
+  if (!filename) {
+    return;
+  }
+
+  const jsonString = JSON.stringify(json || disk, null, 2);
+  const jsonBlob = new Blob([jsonString], {type: 'text/plain;charset=utf-8'});
+  saveAs(jsonBlob, filename);
 };
 
 // zIndex is used to always bring the last-clicked room to the top
@@ -175,15 +197,8 @@ const addExit = (exitList) => {
   exitList.appendChild(exit);
 };
 
-const roomCards = disk.rooms.map(makeRoomCard);
-
-roomCards.forEach(r => {
-  $('body').appendChild(r);
-});
-
 // Update disk data in memory to reflect what is displayed on screen
 const updateData = () => {
-  const toArray = (nodeList) => [].slice.call(nodeList);
   const roomCards = toArray(document.querySelectorAll('.room'));
 
   // TODO: If user changes name of starting room, update starting roomId
@@ -213,5 +228,7 @@ const updateData = () => {
     });
   });
 };
+
+loadDisk(); // Load initial disk
 
 $('body').addEventListener('keyup', updateData);

@@ -10,7 +10,13 @@
     <link rel="stylesheet" type="text/css" href="styles.css">
   </head>
   <body>
-    <button id="export" type="submit">Export Disk</button>
+    <div class="buttons">
+      <button id="import" type="submit">
+        <input type="file" onchange="importJSON()">
+        Import JSON
+      </button>
+      <button id="export" type="submit" onclick="exportJSON()">Export JSON</button>
+    </div>
   </body>
   <!-- Include game data ('disk') -->
   <script src="node_modules/text-engine/game-disks/unlimited-adventure.js"></script>

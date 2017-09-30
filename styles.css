@@ -17,16 +17,21 @@ body * {
   border-radius: 2vh;
 }
 
-button {
-  background-color: hsl(164, 94%, 25%);
-  box-shadow: 1vh 1vh hsl(164, 94%, 15%);
+.buttons {
   position: absolute;
   top: 1vh;
   right: 1vh;
   z-index: 9999999;
+}
+
+button {
+  background-color: hsl(164, 94%, 25%);
+  box-shadow: 1vh 1vh hsl(164, 94%, 15%);
   font-size: 5vh;
   border: none;
   padding: 1vh;
+  margin: 1vh;
+  width: 40vh;
 }
 
 button:focus {
