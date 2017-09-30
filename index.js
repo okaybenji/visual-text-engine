@@ -5,6 +5,19 @@ const $ = (query) => document.querySelector(query);
 // zIndex is used to always bring the last-clicked room to the top
 let zIndex = unlimitedAdventure.rooms.length;
 
+const deleteRoom = (roomCard) => {
+  const roomId = roomCard.querySelector('.id').innerText;
+  const deleteWasConfirmed = confirm(`Press OK to delete room: ${roomId}. You cannot undo thus change. (However, the change will not be saved until you export your game data.)`);
+
+  if (!deleteWasConfirmed) {
+    return;
+  }
+
+  $('body').removeChild(roomCard);
+  delete roomCard;
+  updateData();
+};
+
 const roomCards = unlimitedAdventure.rooms
   .map(roomData => {
     const roomCard = document.createElement('div');
@@ -22,7 +35,9 @@ const roomCards = unlimitedAdventure.rooms
 
     roomCard.innerHTML = `
       <br>
-      <span class="title id" contenteditable="true">${roomData.id}</span>
+      <span class="title">
+        <span class="id" contenteditable="true">${roomData.id}</span> <sup class="delete">x</sup>
+      </span>
       <br>
       <span>
         <span class="prop">NAME</span>
@@ -83,19 +98,26 @@ const roomCards = unlimitedAdventure.rooms
       $('body').removeEventListener('mousemove', move);
     }, false);
 
+    roomCard.querySelector('.delete').onclick = () => {
+      deleteRoom(roomCard);
+    };
+
     return roomCard;
   })
 
 roomCards.forEach(r => {
-  $('main').appendChild(r);
+  $('body').appendChild(r);
 });
 
-const save = () => {
+// Update disk data in memory to reflect what is displayed on screen
+const updateData = () => {
+  const toArray = (nodeList) => [].slice.call(nodeList);
+  const roomCards = toArray(document.querySelectorAll('.room'));
+
   // TODO: If user changes name of starting room, update starting roomId
   unlimitedAdventure.rooms = roomCards.map((roomCard, i) => {
     const roomData = unlimitedAdventure.rooms[i];
     const getVal = (className) => roomCard.querySelector(className).innerText;
-    const toArray = (nodeList) => [].slice.call(nodeList);
 
     const exits = toArray(roomCard.querySelectorAll('.exits'))
       .filter(exit => (exit.querySelector('.dir'))) // TODO: why this?
@@ -114,4 +136,4 @@ const save = () => {
   });
 };
 
-$('body').addEventListener('keyup', save);
+$('body').addEventListener('keyup', updateData);
