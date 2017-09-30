@@ -5,7 +5,7 @@
 
 body {
   margin: 0;
-  background-color: hsl(302, 10%, 99%);
+  background-color: hsl(302, 10%, 90%);
   width: 100vw;
   height: 100vh;
   font-size: 3.5vh;
@@ -79,4 +79,9 @@ button:focus {
 .resizable {
   overflow: scroll;
   resize: both;
+}
+
+svg {
+  z-index: -1;
+  position: absolute;
 }

@@ -12,6 +12,8 @@ const loadDisk = () => {
   newRoomCards.forEach(r => {
     $('body').appendChild(r);
   });
+
+  updateConnections(newRoomCards);
 };
 
   // TODO: Imports and exports use JSON.stringify and will currently remove item use methods.
@@ -47,6 +49,9 @@ let zIndex = disk.rooms.length;
 
 const makeRoomCard = ({id, name, desc, items, exits, img}) => {
   const roomCard = document.createElement('div');
+
+  roomCard.style.top = `${Math.random() * 240}px`;
+  roomCard.style.left = `${Math.random() * 640}px`;
 
   const itemList = (items || [])
     .map(item => item.name)
@@ -97,6 +102,7 @@ const makeRoomCard = ({id, name, desc, items, exits, img}) => {
   const move = e => {
     roomCard.style.top = `${e.clientY - offsetY}px`;
     roomCard.style.left = `${e.clientX - offsetX}px`;
+    updateConnections();
   };
 
   roomCard.addEventListener('mousedown', e => {
@@ -197,6 +203,51 @@ const addExit = (exitList) => {
   exitList.appendChild(exit);
 };
 
+const updateConnections = (roomCards) => {
+  roomCards = roomCards || toArray(document.querySelectorAll('.room'));
+  const oldConnections = toArray(document.querySelectorAll('line'));
+  oldConnections.forEach(line => {
+    $('svg').removeChild(line);
+  });
+
+  const newConnections = disk.rooms.map((room, index) => {
+    return (room.exits || []).map((exit) => {
+      return makeConnection(roomCards[index], exit.id);
+    });
+  });
+
+  newConnections.forEach(room => {
+    room
+      .filter(line => line)
+      .forEach(line => {
+        $('svg').appendChild(line);
+      });
+  });
+};
+
+// TODO: WIP!
+const makeConnection = (source, exitId) => {
+  const roomCards = toArray(document.querySelectorAll('.room'));
+  const destination = roomCards.find(c => {
+    return c.querySelector('.id').innerText === exitId;
+  });
+
+  if (!destination) {
+    return;
+  }
+
+  const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setAttribute('x1', source.offsetLeft + source.offsetWidth)
+    line.setAttribute('y1', source.offsetTop + source.offsetHeight / 2)
+    line.setAttribute('x2', destination.offsetLeft - 12)
+    line.setAttribute('y2', destination.offsetTop + destination.offsetHeight / 2);
+    line.setAttribute('stroke', 'black');
+    line.setAttribute('stroke-width', '2');
+    line.setAttribute('marker-end', 'url(#triangle)');
+
+  return line;
+};
+
 // Update disk data in memory to reflect what is displayed on screen
 const updateData = () => {
   const roomCards = toArray(document.querySelectorAll('.room'));
@@ -227,6 +278,8 @@ const updateData = () => {
       exits,
     });
   });
+
+  updateConnections();
 };
 
 loadDisk(); // Load initial disk
