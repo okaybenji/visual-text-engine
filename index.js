@@ -6,6 +6,11 @@ const $ = (query) => document.querySelector(query);
 
 $('#export').onclick = () => {
   const diskName = prompt('Enter a name for your disk (must be a valid JavaScript variable name)', 'game-disk');
+
+  if (!diskName) {
+    return;
+  }
+
   // TODO: This will currently remove item use methods.
   // First, create disk object where use methods are replace with use.toString().
   // Pass this version to JSON.stringify when creating diskString.
