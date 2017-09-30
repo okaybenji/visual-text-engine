@@ -14,7 +14,10 @@ const roomCards = unlimitedAdventure.rooms
       .join(', ');
 
     const exitList = (roomData.exits || [])
-      .map(exit => `${exit.dir} → ${exit.id}`)
+      .map(exit => `
+        <span class="dir" contenteditable="true">${exit.dir}</span> →
+        <span class="id" contenteditable="true">${exit.id}</span>
+      `)
       .join('<br><br>');
 
     roomCard.innerHTML = `
@@ -92,11 +95,21 @@ const save = () => {
   unlimitedAdventure.rooms = roomCards.map((roomCard, i) => {
     const roomData = unlimitedAdventure.rooms[i];
     const getVal = (className) => roomCard.querySelector(className).innerText;
+    const toArray = (nodeList) => [].slice.call(nodeList);
+
+    const exits = toArray(roomCard.querySelectorAll('.exits'))
+      .filter(exit => (exit.querySelector('.dir'))) // TODO: why this?
+      .map(exit => ({
+        dir: exit.querySelector('.dir').innerText,
+        id: exit.querySelector('.id').innerText,
+      }));
+
     return Object.assign(roomData, {
       id: getVal('.id'),
       name: getVal('.name'),
       desc: getVal('.desc'),
       img: getVal('.img'),
+      exits,
     });
   });
 };
