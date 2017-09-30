@@ -2,6 +2,8 @@
 
 Visual Text Engine (working title) is meant to be a graphical user interface for [text-engine](https://www.github.com/okaybenji/text-engine), a tool for creating text adventure games that run in the browser.
 
+[Try it out! (Live demo)](https://okaybenji.github.io/visual-text-engine/)
+
 ### Planned features include (this is my to-do list):
 
 #### General
