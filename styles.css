@@ -38,6 +38,10 @@ body {
   font-family: 'Raleway Dots', serif;
 }
 
+.value:empty::after {
+  content: 'None';
+}
+
 .img {
   font-family: 'Apple II';
   font-size: 2vh;

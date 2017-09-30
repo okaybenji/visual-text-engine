@@ -1,9 +1,11 @@
-console.log(unlimitedAdventure); // Debugging
+const disk = unlimitedAdventure;
+
+console.log(disk); // Debugging
 
 const $ = (query) => document.querySelector(query);
 
 // zIndex is used to always bring the last-clicked room to the top
-let zIndex = unlimitedAdventure.rooms.length;
+let zIndex = disk.rooms.length;
 
 const deleteRoom = (roomCard) => {
   const roomId = roomCard.querySelector('.id').innerText;
@@ -18,7 +20,7 @@ const deleteRoom = (roomCard) => {
   updateData();
 };
 
-const roomCards = unlimitedAdventure.rooms
+const roomCards = disk.rooms
   .map(roomData => {
     const roomCard = document.createElement('div');
 
@@ -31,7 +33,7 @@ const roomCards = unlimitedAdventure.rooms
         <span class="dir" contenteditable="true">${exit.dir}</span> →
         <span class="id" contenteditable="true">${exit.id}</span>
       `)
-      .join('<br><br>');
+      .join('<br>');
 
     roomCard.innerHTML = `
       <br>
@@ -49,17 +51,17 @@ const roomCards = unlimitedAdventure.rooms
         <br>
         <br>
         <span class="prop">ITEMS</span>
-        <span class="value items">${itemList || 'None'}</span>
+        <span class="value items">${itemList}</span>
         <br>
         <br>
         <span class="prop">EXITS</span>
         <br>
-        <span class="value exits">${exitList || 'None'}</span>
+        <span class="value exits">${exitList}</span>
         <br>
         <br>
         <span class="prop">ARTWORK</span>
         <br>
-        <span class="img" contenteditable="true">${roomData.img}</span><br><br>
+        <span class="value img" contenteditable="true">${roomData.img}</span><br><br>
       </span>
     `;
     roomCard.classList.add('room'); // Style rooms
@@ -115,8 +117,8 @@ const updateData = () => {
   const roomCards = toArray(document.querySelectorAll('.room'));
 
   // TODO: If user changes name of starting room, update starting roomId
-  unlimitedAdventure.rooms = roomCards.map((roomCard, i) => {
-    const roomData = unlimitedAdventure.rooms[i];
+  disk.rooms = roomCards.map((roomCard, i) => {
+    const roomData = disk.rooms[i];
     const getVal = (className) => roomCard.querySelector(className).innerText;
 
     const exits = toArray(roomCard.querySelectorAll('.exits'))
