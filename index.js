@@ -5,26 +5,43 @@ const $ = (query) => document.querySelector(query);
 // zIndex is used to always bring the last-clicked room to the top
 let zIndex = unlimitedAdventure.rooms.length;
 
-unlimitedAdventure.rooms
+const roomCards = unlimitedAdventure.rooms
   .map(roomData => {
     const roomCard = document.createElement('div');
 
+    const itemList = (roomData.items || [])
+      .map(item => item.name)
+      .join(', ');
+
+    const exitList = (roomData.exits || [])
+      .map(exit => `${exit.dir} → ${exit.id}`)
+      .join('<br><br>');
+
     roomCard.innerHTML = `
       <br>
-      <span class="title" contenteditable="true">${roomData.id}</span>
+      <span class="title id" contenteditable="true">${roomData.id}</span>
       <br>
       <span>
         <span class="prop">NAME</span>
-        <span class="value" contenteditable="true">${roomData.name}</span>
+        <span class="value name" contenteditable="true">${roomData.name}</span>
         <br>
         <br>
         <span class="prop">DESCRIPTION</span>
-        <span class="value" contenteditable="true">${roomData.desc}</span>
+        <span class="value desc" contenteditable="true">${roomData.desc}</span>
+        <br>
+        <br>
+        <span class="prop">ITEMS</span>
+        <span class="value items">${itemList || 'None'}</span>
+        <br>
+        <br>
+        <span class="prop">EXITS</span>
+        <br>
+        <span class="value exits">${exitList || 'None'}</span>
         <br>
         <br>
         <span class="prop">ARTWORK</span>
         <br>
-        <span class="art" contenteditable="true">${roomData.img}</span><br><br>
+        <span class="img" contenteditable="true">${roomData.img}</span><br><br>
       </span>
     `;
     roomCard.classList.add('room'); // Style rooms
@@ -65,6 +82,23 @@ unlimitedAdventure.rooms
 
     return roomCard;
   })
-  .forEach(r => {
-    $('main').appendChild(r);
+
+roomCards.forEach(r => {
+  $('main').appendChild(r);
+});
+
+const save = () => {
+  // TODO: If user changes name of starting room, update starting roomId
+  unlimitedAdventure.rooms = roomCards.map((roomCard, i) => {
+    const roomData = unlimitedAdventure.rooms[i];
+    const getVal = (className) => roomCard.querySelector(className).innerText;
+    return Object.assign(roomData, {
+      id: getVal('.id'),
+      name: getVal('.name'),
+      desc: getVal('.desc'),
+      img: getVal('.img'),
+    });
   });
+};
+
+$('body').addEventListener('keyup', save);
