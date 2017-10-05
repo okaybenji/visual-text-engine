@@ -9,8 +9,12 @@ const loadDisk = () => {
   });
 
   const newRoomCards = disk.rooms.map(makeRoomCard);
-  newRoomCards.forEach(r => {
+  newRoomCards.forEach((r, i) => {
     $('body').appendChild(r);
+
+    // Lay out cards in a cascade.
+    r.style.top = `${(i % 16) * 5}vh`;
+    r.style.left = `${(i % 16) * 5}vh`;
   });
 
   updateConnections(newRoomCards);
@@ -49,9 +53,6 @@ let zIndex = disk.rooms.length;
 
 const makeRoomCard = ({id, name, desc, items, exits, img}) => {
   const roomCard = document.createElement('div');
-
-  roomCard.style.top = `${Math.random() * 240}px`;
-  roomCard.style.left = `${Math.random() * 640}px`;
 
   const itemList = (items || [])
     .map(item => item.name)
