@@ -139,7 +139,7 @@ const makeMoveable = (element) => {
   }, false);
 };
 
-makeMoveable($('#settings'));
+makeMoveable($('#state'));
 makeMoveable($('#item-editor'));
 
 const selectItem = (item) => {

@@ -27,13 +27,13 @@
       </button>
       <button id="export" type="submit" onclick="exportJSON()">Export JSON</button>
     </div>
-      <div id="settings" class="card resizable">
+      <div id="state" class="card resizable">
         <br>
-        <span class="title">Game Settings</span>
+        <span class="title">Initial State</span>
         <br>
-        <span class="prop">Starting Room</span> <select class="value start" onchange="updateData()"></select>
+        <span class="prop">ROOM</span> <select class="value start" onchange="updateData()"></select>
         <br>
-        <span class="prop">Initial Inventory</span> <span class="value inventory"></span>
+        <span class="prop">INVENTORY</span> <span class="value inventory"></span>
         <br><br>
       </div>
       <div id="item-editor" class="card resizable">
