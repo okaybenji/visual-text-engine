@@ -12,7 +12,6 @@ Visual Text Engine (working title) is meant to be a graphical user interface for
 - [ ] Export game to webpage
 - [ ] Export game to zip (for easy upload to [itch.io](https://itch.io))
 - [X] Manage starting room ID
-- [ ] Choose starting room ID from drop-down list
 - [ ] Manage starting inventory
 - [X] Add/remove rooms
 
