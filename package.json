@@ -26,6 +26,6 @@
   },
   "homepage": "https://github.com/okaybenji/visual-text-engine#readme",
   "dependencies": {
-    "text-engine": "^1.0.0"
+    "text-engine": "^1.0.1"
   }
 }

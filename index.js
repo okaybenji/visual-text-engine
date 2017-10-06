@@ -29,10 +29,6 @@ const loadDisk = () => {
   updateConnections(newRoomCards);
 };
 
-  // TODO: Imports and exports use JSON.stringify and will currently remove item use methods.
-  // First, create disk object where use methods are replace with use.toString().
-  // Pass this version to JSON.stringify when creating diskString.
-  // Then, update text-engine to check if a use method is a string and eval it.
 const importJSON = () => {
   const file = $('input').files[0];
   const fileReader = new FileReader();
@@ -45,14 +41,37 @@ const importJSON = () => {
   fileReader.readAsText(file);
 };
 
-const exportJSON = (json) => {
+const exportJSON = (json = disk) => {
   const filename = prompt('Save file as...', 'gameDisk.json');
 
   if (!filename) {
     return;
   }
 
-  const jsonString = JSON.stringify(json || disk, null, 2);
+  /**
+   * Simply using JSON.stringify on a disk would remove all methods. To preserve the use methods on
+   * items, we'll first create a disk object where use methods are replaced with use.toString().
+   */
+  const jsonWithFtnStrs = Object.create(json);
+  jsonWithFtnStrs.roomId = jsonWithFtnStrs.roomId;
+
+  const stringifyItemUse = (item) => {
+    if (item.use) {
+      item.use = item.use.toString();
+    }
+
+    return item;
+  };
+
+  jsonWithFtnStrs.inventory = jsonWithFtnStrs.inventory.map(stringifyItemUse);
+  jsonWithFtnStrs.rooms = jsonWithFtnStrs.rooms.map((room) => {
+    if (room.items) {
+      room.items = room.items.map(stringifyItemUse);
+    }
+    return room;
+  });
+
+  const jsonString = JSON.stringify(jsonWithFtnStrs, null, 2);
   const jsonBlob = new Blob([jsonString], {type: 'text/plain;charset=utf-8'});
   saveAs(jsonBlob, filename);
 };
