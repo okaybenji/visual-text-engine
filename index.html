@@ -20,6 +20,13 @@
       </marker>
     </svg>
     <div class="buttons">
+      <button onclick="addRoom()">Add Room</button>
+      <button id="import" type="submit">
+        <input type="file" onchange="importJSON()">
+        Import JSON
+      </button>
+      <button id="export" type="submit" onclick="exportJSON()">Export JSON</button>
+    </div>
       <div id="settings" class="card resizable">
         <br>
         <span class="title">Game Settings</span>
@@ -29,13 +36,12 @@
         <span class="prop">Initial Inventory</span> <span class="value inventory"></span>
         <br><br>
       </div>
-      <button onclick="addRoom()">Add Room</button>
-      <button id="import" type="submit">
-        <input type="file" onchange="importJSON()">
-        Import JSON
-      </button>
-      <button id="export" type="submit" onclick="exportJSON()">Export JSON</button>
-    </div>
+      <div id="item-editor" class="card resizable">
+        <br>
+        <span class="title">Item Editor</span>
+        <br>
+        No item selected.
+      </div>
   </body>
   <script src="sample-disk.js"></script>
   <script src="index.js"></script>

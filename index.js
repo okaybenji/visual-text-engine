@@ -39,12 +39,14 @@ const loadDisk = () => {
 
   // Add room cards
   const newRoomCards = disk.rooms.map(makeRoomCard);
-  newRoomCards.forEach((r, i) => {
+  newRoomCards.forEach((r) => {
     $('body').appendChild(r);
+  });
 
-    // Lay out cards in a cascade.
-    r.style.top = `${(i % 16) * 5}vh`;
-    r.style.left = `${(i % 16) * 5}vh`;
+  // Lay out all cards in a cascade.
+  toArray(document.querySelectorAll('.card')).forEach((card, i) => {
+    card.style.top = `${(i % 16) * 5}vh`;
+    card.style.left = `${(i % 16) * 5}vh`;
   });
 
   // Visualize connections between cards
@@ -138,13 +140,35 @@ const makeMoveable = (element) => {
 };
 
 makeMoveable($('#settings'));
+makeMoveable($('#item-editor'));
+
+const selectItem = (item) => {
+  $('#item-editor').innerHTML = `
+    <br>
+    <span class="title">Item Editor</span>
+    <br>
+    <span class="prop">NAME</span> <span class="value name" contenteditable="true">${item.name}</span>
+    <br><br>
+    <span class="prop">DESCRIPTION</span> <span class="value description" contenteditable="true">${item.desc}</span>
+    <br><br>
+    <span class="prop">USE</span><br><textarea class="value use">${item.use ? item.use.toString() : ''}</textarea>
+    <br><br>
+  `;
+};
 
 const makeRoomCard = ({id, name, desc, items, exits, img}) => {
   const roomCard = document.createElement('div');
 
   const itemList = (items || [])
-    .map(item => item.name)
-    .join(', ');
+    .map((item) => {
+      const itemBtn = document.createElement('a');
+      itemBtn.onclick = () => {
+        selectItem(item);
+      };
+      itemBtn.innerText = item.name;
+
+      return itemBtn;
+    });
 
   const exitList = (exits || [])
     .map(exit => makeExit(exit));
@@ -165,8 +189,7 @@ const makeRoomCard = ({id, name, desc, items, exits, img}) => {
       <br>
       <br>
       <span class="prop">ITEMS</span>
-      <span class="value items">${itemList}</span>
-      <br>
+      <span class="value items"><br></span>
       <br>
       <span class="prop">EXITS <sup class="addExit">+</sup></span>
       <br>
@@ -180,6 +203,12 @@ const makeRoomCard = ({id, name, desc, items, exits, img}) => {
   roomCard.classList.add('card'); // Style rooms as cards
   roomCard.classList.add('room'); // Style rooms as room cards
   roomCard.classList.add('resizable'); // Make them resizable
+
+  itemList.forEach(item => {
+    const items = roomCard.querySelector('.items');
+    items.appendChild(item);
+    items.appendChild(document.createElement('br'));
+  });
 
   exitList.forEach(exit => {
     roomCard.querySelector('.exits').appendChild(exit);
