@@ -68,6 +68,11 @@ button:focus {
   font-family: 'Raleway Dots', serif;
 }
 
+select {
+  font-size: 3.5vh;
+  color: black;
+}
+
 .value:empty::after {
   content: 'None';
 }

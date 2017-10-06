@@ -2,9 +2,31 @@ let disk = unlimitedAdventure;
 const $ = (query) => document.querySelector(query);
 const toArray = (nodeList) => [].slice.call(nodeList);
 
+const buildRoomList = () => {
+  const roomList = $('.start');
+  while (roomList.firstChild) {
+    roomList.removeChild(roomList.firstChild);
+  }
+
+  const options = disk.rooms.map(room => {
+    const option = document.createElement('option');
+    option.text = room.id;
+    option.value = room.id;
+
+    return option;
+  });
+
+  options.forEach(option => {
+    roomList.appendChild(option);
+  });
+  roomList.value = disk.roomId;
+};
+
 const loadDisk = () => {
-  // Load initial game state
-  $('.start').innerText = disk.roomId;
+  // Load room list for initial game state
+  buildRoomList();
+
+  // Load initial inventory
   $('.inventory').innerText = (disk.inventory || [])
     .map(item => item.name)
     .join(', ');
@@ -199,6 +221,7 @@ const deleteRoom = (roomCard) => {
   }
 
   $('body').removeChild(roomCard);
+
   updateData();
 };
 
@@ -285,12 +308,12 @@ const makeConnection = (source, exitId) => {
 };
 
 // Update disk data in memory to reflect what is displayed on screen
-const updateData = () => {
-  disk.roomId = $('.start').innerText;
+const updateData = (e) => {
+  // TODO: If user changes name of starting room, update starting roomId to match
+  disk.roomId = $('.start').value;
 
   const roomCards = toArray(document.querySelectorAll('.room'));
 
-  // TODO: If user changes name of starting room, update starting roomId
   disk.rooms = roomCards.map((roomCard, i) => {
     const roomData = disk.rooms[i];
 
@@ -318,6 +341,7 @@ const updateData = () => {
   });
 
   updateConnections();
+  buildRoomList();
 };
 
 loadDisk(); // Load initial disk
