@@ -38,15 +38,21 @@ button:focus {
   outline: none;
 }
 
-.room {
-  background-color: hsl(268, 94%, 25%);
-  box-shadow: 1vh 1vh hsl(268, 94%, 15%);
+.card {
+  background-color: hsl(164, 94%, 25%);
+  box-shadow: 1vh 1vh hsl(164, 94%, 15%);
+  border-top: 25px solid hsl(164, 94%, 77%);
   width: 50vh;
   height: 20vh;
-  border-top: 25px solid hsl(268, 94%, 77%);
   padding: 0 4vh;
   position: absolute;
   user-select: none; /* Prevent accidental highlighting while dragging rooms */
+}
+
+.room {
+  background-color: hsl(268, 94%, 25%);
+  box-shadow: 1vh 1vh hsl(268, 94%, 15%);
+  border-top: 25px solid hsl(268, 94%, 77%);
 }
 
 .title {

@@ -20,7 +20,6 @@ Visual Text Engine (working title) is meant to be a graphical user interface for
 - [X] Set/change room ID, name, description, exits and artwork
 - [ ] Choose exit destination from drop-down list
 - [X] Drag and resize room cards
-- [ ] Auto-size and -position rooms cards on load (look into box packing)
 - [X] Add/remove room exits
 - [ ] Visualize connections between rooms
 - [ ] Selected card is highlighted; connections coming from and going to it are color-coded
@@ -32,6 +31,7 @@ Visual Text Engine (working title) is meant to be a graphical user interface for
 - [ ] Set item use function (perhaps save to/load from .js files)
 
 ### Someday/maybe
+- [ ] Auto-size and -position rooms cards on load (look into box packing)
 - [ ] Drag-and-drop connections between rooms
 - [ ] Drag-and-drop items (move items to other rooms)
 - [ ] ASCII art editor

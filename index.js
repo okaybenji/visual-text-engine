@@ -3,11 +3,19 @@ const $ = (query) => document.querySelector(query);
 const toArray = (nodeList) => [].slice.call(nodeList);
 
 const loadDisk = () => {
+  // Load initial game state
+  $('.start').innerText = disk.roomId;
+  $('.inventory').innerText = (disk.inventory || [])
+    .map(item => item.name)
+    .join(', ');
+
+  // Remove existing room cards
   const oldRoomCards = toArray(document.querySelectorAll('.room'));
   oldRoomCards.forEach(room => {
     $('body').removeChild(room)
   });
 
+  // Add room cards
   const newRoomCards = disk.rooms.map(makeRoomCard);
   newRoomCards.forEach((r, i) => {
     $('body').appendChild(r);
@@ -17,6 +25,7 @@ const loadDisk = () => {
     r.style.left = `${(i % 16) * 5}vh`;
   });
 
+  // Visualize connections between cards
   updateConnections(newRoomCards);
 };
 
@@ -50,6 +59,44 @@ const exportJSON = (json) => {
 
 // zIndex is used to always bring the last-clicked room to the top
 let zIndex = disk.rooms.length;
+
+// Make DOM element draggable
+const makeMoveable = (element) => {
+  let offsetX, offsetY;
+
+  // Move room to mouse position (maintaining mouse position relative to room)
+  const move = e => {
+    element.style.top = `${e.clientY - offsetY}px`;
+    element.style.left = `${e.clientX - offsetX}px`;
+    updateConnections();
+  };
+
+  element.addEventListener('mousedown', e => {
+    // Bring the room to the top when clicked
+    element.style.zIndex = zIndex++;
+
+    // Capture mouse position relative to element
+    offsetX = e.clientX - element.offsetLeft;
+    offsetY = e.clientY - element.offsetTop;
+
+    // Only move if clicking title bar
+    if (offsetY > 30) {
+      return;
+    }
+
+    $('body').addEventListener('mousemove', move);
+  }, false);
+
+  $('body').addEventListener('mouseup', (e) => {
+    $('body').removeEventListener('mousemove', move);
+  }, false);
+
+  element.addEventListener('mouseup', (e) => {
+    $('body').removeEventListener('mousemove', move);
+  }, false);
+};
+
+makeMoveable($('#settings'));
 
 const makeRoomCard = ({id, name, desc, items, exits, img}) => {
   const roomCard = document.createElement('div');
@@ -89,46 +136,15 @@ const makeRoomCard = ({id, name, desc, items, exits, img}) => {
       <span class="value img" contenteditable="true">${img || ''}</span><br><br>
     </span>
   `;
-  roomCard.classList.add('room'); // Style rooms
+  roomCard.classList.add('card'); // Style rooms as cards
+  roomCard.classList.add('room'); // Style rooms as room cards
   roomCard.classList.add('resizable'); // Make them resizable
 
   exitList.forEach(exit => {
     roomCard.querySelector('.exits').appendChild(exit);
   });
 
-  // Make rooms draggable
-  let offsetX, offsetY;
-
-  // Move room to mouse position (maintaining mouse position relative to room)
-  const move = e => {
-    roomCard.style.top = `${e.clientY - offsetY}px`;
-    roomCard.style.left = `${e.clientX - offsetX}px`;
-    updateConnections();
-  };
-
-  roomCard.addEventListener('mousedown', e => {
-    // Bring the room to the top when clicked
-    roomCard.style.zIndex = zIndex++;
-
-    // Capture mouse position relative to element
-    offsetX = e.clientX - roomCard.offsetLeft;
-    offsetY = e.clientY - roomCard.offsetTop;
-
-    // Only move if clicking title bar
-    if (offsetY > 30) {
-      return;
-    }
-
-    $('body').addEventListener('mousemove', move);
-  }, false);
-
-  $('body').addEventListener('mouseup', (e) => {
-    $('body').removeEventListener('mousemove', move);
-  }, false);
-
-  roomCard.addEventListener('mouseup', (e) => {
-    $('body').removeEventListener('mousemove', move);
-  }, false);
+  makeMoveable(roomCard);
 
   // Delete room
   roomCard.querySelector('.deleteRoom').onclick = () => {

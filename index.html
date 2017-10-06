@@ -20,6 +20,15 @@
       </marker>
     </svg>
     <div class="buttons">
+      <div id="settings" class="card resizable">
+        <br>
+        <span class="title">Game Settings</span>
+        <br>
+        <span class="prop">Starting Room</span> <span class="value start" contenteditable="true"></span>
+        <br>
+        <span class="prop">Initial Inventory</span> <span class="value inventory"></span>
+        <br><br>
+      </div>
       <button onclick="addRoom()">Add Room</button>
       <button id="import" type="submit">
         <input type="file" onchange="importJSON()">
