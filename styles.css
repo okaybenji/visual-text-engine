@@ -8,30 +8,30 @@ body {
   background-color: hsl(302, 10%, 90%);
   width: 100vw;
   height: 100vh;
-  font-size: 3.5vh;
+  font-size: 1.75vh;
 }
 
 body * {
   color: hsl(302, 10%, 99%);
   font-family: 'Varela Round', sans-serif;
-  border-radius: 2vh;
+  border-radius: 1vh;
 }
 
 .buttons {
   position: absolute;
-  top: 1vh;
-  right: 1vh;
+  top: 0.5vh;
+  right: 0.5vh;
   z-index: 9999999;
 }
 
 button {
   background-color: hsl(164, 94%, 25%);
-  box-shadow: 1vh 1vh hsl(164, 94%, 15%);
-  font-size: 5vh;
+  box-shadow: 0.5vh 0.5vh hsl(164, 94%, 15%);
+  font-size: 2.5vh;
   border: none;
-  padding: 1vh;
-  margin: 1vh;
-  width: 40vh;
+  padding: 0.5vh;
+  margin: 0.5vh;
+  width: 20vh;
 }
 
 button:focus {
@@ -40,23 +40,23 @@ button:focus {
 
 .card {
   background-color: hsl(164, 94%, 25%);
-  box-shadow: 1vh 1vh hsl(164, 94%, 15%);
+  box-shadow: 0.5vh 0.5vh hsl(164, 94%, 15%);
   border-top: 25px solid hsl(164, 94%, 77%);
-  width: 50vh;
-  height: 20vh;
-  padding: 0 4vh;
+  width: 25vh;
+  height: 10vh;
+  padding: 0 2vh;
   position: absolute;
   user-select: none; /* Prevent accidental highlighting while dragging rooms */
 }
 
 .room {
   background-color: hsl(268, 94%, 25%);
-  box-shadow: 1vh 1vh hsl(268, 94%, 15%);
+  box-shadow: 0.5vh 0.5vh hsl(268, 94%, 15%);
   border-top: 25px solid hsl(268, 94%, 77%);
 }
 
 .title {
-  font-size: 5vh;
+  font-size: 2.5vh;
   display: block;
 }
 
@@ -69,7 +69,7 @@ button:focus {
 }
 
 select, textarea {
-  font-size: 3.5vh;
+  font-size: 1.75vh;
   color: black;
 }
 
@@ -83,7 +83,7 @@ a:hover {
 
 .img {
   font-family: 'Apple II';
-  font-size: 2vh;
+  font-size: 1vh;
   white-space: pre;
 }
 
