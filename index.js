@@ -267,6 +267,8 @@ const makeConnection = (source, exitId) => {
 
 // Update disk data in memory to reflect what is displayed on screen
 const updateData = () => {
+  disk.roomId = $('.start').innerText;
+
   const roomCards = toArray(document.querySelectorAll('.room'));
 
   // TODO: If user changes name of starting room, update starting roomId
